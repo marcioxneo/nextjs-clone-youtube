@@ -1,14 +1,17 @@
 import { ObjectId } from 'mongodb';
 import nc from 'next-connect';
-import connectToDatabase from 'src/utils/mongodb';
-import upload from 'src/utils/upload';
-// import thumb from '/thumbs/next01.png';
+import { connectToDatabase } from 'src/utils/mongodb';
+
+function someMiddleware() {
+  return 'ok';
+}
 
 const handler = nc()
-  .use(upload.single('file'))
+  .use(someMiddleware())
+  .get((req, res) => {
+    res.send('Hello world');
+  })
   .post(async (req, res) => {
-    // receber nossa imagem e outros dados pelo endpoint
-    // inseri no banco de dados MONGODB
     const { title, authorId, authorName, authorAvatar, videoUrl } = req.body;
     const { db } = await connectToDatabase();
     const collection = db.collection('videos');
@@ -24,7 +27,10 @@ const handler = nc()
       updatedAt: new Date(),
     });
 
-    return res.status(200).json({ ok: true });
+    res.json({ hello: 'world' });
+  })
+  .put(async (req, res) => {
+    res.end('async/await is also supported!');
   })
   .patch(async (req, res) => {
     throw new Error('Throws me around! Error can be caught and handled.');

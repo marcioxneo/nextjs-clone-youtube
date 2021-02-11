@@ -4,6 +4,7 @@ import ToolBar from '@material-ui/core/Toolbar';
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
+import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -12,6 +13,7 @@ import Apps from '@material-ui/icons/Apps';
 import MoreVert from '@material-ui/icons/MoreVert';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
+import { signIn, signOut, useSession } from 'next-auth/client';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 function TopBar() {
   const classes = useStyles();
+  const [session] = useSession();
   return (
     <AppBar className={classes.root} color="default">
       <ToolBar className={classes.toolbar}>
@@ -73,14 +76,26 @@ function TopBar() {
           <IconButton className={classes.icons}>
             <MoreVert />
           </IconButton>
-          <Button
-            color="secondary"
-            component="a"
-            variant="outlined"
-            startIcon={<AccountCircle />}
-          >
-            Fazer Login
-          </Button>
+          {!session ? (
+            <Button
+              color="secondary"
+              component="a"
+              variant="outlined"
+              startIcon={<AccountCircle />}
+              onClick={() => signIn('google')}
+            >
+              Fazer Login
+            </Button>
+          ) : (
+            <Box display="flex" alignItems="center">
+              <Avatar
+                onClick={() => signOut()}
+                alt="User"
+                className={classes.avatar}
+                src={session?.user?.image}
+              />
+            </Box>
+          )}
         </Box>
       </ToolBar>
     </AppBar>

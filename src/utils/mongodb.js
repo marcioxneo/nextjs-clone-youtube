@@ -3,24 +3,24 @@ import { MongoClient } from 'mongodb';
 const uri = process.env.MONGODB_URI;
 const dbName = process.env.MONGODB_DB;
 
-const cachedDb;
-const cachedClient;
+let cachedDb;
+let cachedClient;
 
-if(!url) {
+if (!uri) {
   throw new Error(
-    'Please define the MONGDB_URI enviroment variable inside .env.local',
+    'Please define the MONGDB_URI enviroment variable inside .env.local'
   );
 }
 
-if(!dbName) {
+if (!dbName) {
   throw new Error(
-    'Please define the MONGODB_DB enviroment variable inside .env.local',
+    'Please define the MONGODB_DB enviroment variable inside .env.local'
   );
 }
 
 export async function connectToDatabase() {
-  if(cachedClient && cachedDb) {
-    return { client: cachedClient, db: cachedDb};
+  if (cachedClient && cachedDb) {
+    return { client: cachedClient, db: cachedDb };
   }
 
   const client = await MongoClient.connect(uri, {
@@ -36,4 +36,4 @@ export async function connectToDatabase() {
   return { client, db };
 }
 
-export default connectToDatabase
+export default connectToDatabase;

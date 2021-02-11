@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   makeStyles,
@@ -35,6 +36,9 @@ import Flag from '@material-ui/icons/Flag';
 import Help from '@material-ui/icons/Help';
 import Feedback from '@material-ui/icons/Feedback';
 import AddCircle from '@material-ui/icons/AddCircle';
+import { signIn } from 'next-auth/client';
+
+// const logo = 'https://www.youtube.com/s/desktop/a386e432/img/favicon.ico';
 
 const useStyles = makeStyles((theme) => ({
   mobileDrawer: {
@@ -165,6 +169,7 @@ function NavBar() {
             variant="outlined"
             color="secondary"
             startIcon={<AccountCircle />}
+            onClick={() => signIn('google')}
           >
             Fazer Login
           </Button>
