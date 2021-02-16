@@ -36,7 +36,7 @@ import Flag from '@material-ui/icons/Flag';
 import Help from '@material-ui/icons/Help';
 import Feedback from '@material-ui/icons/Feedback';
 import AddCircle from '@material-ui/icons/AddCircle';
-import { signIn } from 'next-auth/client';
+import { useSession, signIn } from 'next-auth/client';
 
 // const logo = 'https://www.youtube.com/s/desktop/a386e432/img/favicon.ico';
 
@@ -107,6 +107,18 @@ const quatermasterMenu = [
 function NavBar() {
   const classes = useStyles();
   const router = useRouter();
+  const [session] = useSession();
+  
+  const [subscriptions, setSuscriptions] = useState([
+    { is: 1, name: 'Canal 1' },
+    { is: 2, name: 'Canal 2' },
+    { is: 3, name: 'Canal 3' },
+    { is: 4, name: 'Canal 4' },
+    { is: 5, name: 'Canal 5' },
+    { is: 6, name: 'Canal 6' },
+    { is: 7, name: 'Canal 7' },
+    { is: 8, name: 'Canal 8' },
+  ]);
 
   const isSelected = (item) => router.pathmame === item.path;
 
@@ -160,20 +172,51 @@ function NavBar() {
         })}
       </List>
       <Divider />
-      <Box mx={4} my={2}>
-        <Typography variant="body2">
-          Faça login para curtir vídeos, comentar e se inscrever.
-        </Typography>
-        <Box mt={2}>
-          <Button
-            variant="outlined"
-            color="secondary"
-            startIcon={<AccountCircle />}
-            onClick={() => signIn('google')}
+      <Box>
+        {!session ? (
+          <Box mx={4} my={2}>
+            <Typography variant="body2">
+              Faça login para curtir vídeos, comentar e se inscrever.
+            </Typography>
+            <Box mt={2}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                startIcon={<AccountCircle />}
+                onClick={() => signIn('google')}
+              >
+                Fazer Login
+              </Button>
+            </Box>
+          </Box>
+        ) : (
+          <List
+            subheader={
+              <ListSubheader component="div" id="nested-list-subheader">
+                INSCRIÇÕES
+              </ListSubheader>
+            }
           >
-            Fazer Login
-          </Button>
-        </Box>
+            {subscriptions.map((item) => (
+              <ListItem
+                key={item.id}
+                button
+                classes={{ root: classes.listItem }}
+                selected={isSelected(item)}
+              >
+                <ListItemIcon>
+                  <Avatar className={classes.avatar}>H</Avatar>
+                </ListItemIcon>
+                <ListItemText
+                  classes={{
+                    primary: classes.listItemText,
+                  }}
+                  primary={item.name}
+                />
+              </ListItem>
+            ))}
+          </List>
+        )}
       </Box>
       <Divider />
       <Box mx={4} my={2}>
