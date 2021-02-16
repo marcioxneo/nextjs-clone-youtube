@@ -108,8 +108,8 @@ function NavBar() {
   const classes = useStyles();
   const router = useRouter();
   const [session] = useSession();
-  
-  const [subscriptions, setSuscriptions] = useState([
+
+  const [subscriptions, setSubscriptions] = useState([
     { is: 1, name: 'Canal 1' },
     { is: 2, name: 'Canal 2' },
     { is: 3, name: 'Canal 3' },
@@ -220,7 +220,7 @@ function NavBar() {
       </Box>
       <Divider />
       <Box mx={4} my={2}>
-        <Typography variant="subtitle2">
+        <Typography variant="body2">
           <b>O MELHOR DO YOUTUBE</b>
         </Typography>
       </Box>
@@ -273,7 +273,7 @@ function NavBar() {
       </List>
       <Divider />
       <Box mx={4} my={2}>
-        <Typography variant="subtitle2">
+        <Typography variant="body2">
           <b>MAIS DO YOUTUBE</b>
         </Typography>
       </Box>

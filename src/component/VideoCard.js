@@ -1,6 +1,7 @@
 import { Box, Typography, Avatar, makeStyles } from '@material-ui/core';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useRouter } from 'next/router';
 
 dayjs.extend(relativeTime);
 
@@ -10,7 +11,7 @@ const useStyles = makeStyles(() => ({
   },
   caption: {
     fontWeight: 500,
-    display: 'webkit-box',
+    display: '-webkit-box',
     '-webkit-line-clamp': 2,
     '-webkit-box-orient': 'vertical',
     overflow: 'hidden',
@@ -19,9 +20,20 @@ const useStyles = makeStyles(() => ({
 
 function VideoCard({ item }) {
   const classes = useStyles();
+  const router = useRouter();
   return (
     <Box>
-      <img alt={item.title} src={item.thumb} className={classes.img} />
+      <img
+        alt={item.title}
+        src={item.thumb}
+        className={classes.img}
+        onClick={() =>
+          router.push({
+            pathname: '/video/[id]',
+            query: { id: item._id },
+          })
+        }
+      />
       <Box display="flex" mt="1">
         <Box mr={2}>
           <Avatar alt={item.authorName} src={item.authorAvatar}>
@@ -32,7 +44,7 @@ function VideoCard({ item }) {
           <Typography
             className={classes.caption}
             gutterBottom
-            variant="body1"
+            variant="body2"
             color="textPrimary"
           >
             {item.title}
