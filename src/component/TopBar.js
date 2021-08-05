@@ -14,6 +14,11 @@ import MoreVert from '@material-ui/icons/MoreVert';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
 import { signIn, signOut, useSession } from 'next-auth/client';
+import useSettings from 'src/hooks/useSettings';
+import { Hidden } from '@material-ui/core';
+import Brightness7Icon from '@material-ui/icons/Brightness7';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
+import THEMES from 'src/utils/constants';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,26 +52,49 @@ const useStyles = makeStyles((theme) => ({
 function TopBar() {
   const classes = useStyles();
   const [session] = useSession();
+  const { settings, saveSettings } = useSettings();
+
   return (
     <AppBar className={classes.root} color="default">
       <ToolBar className={classes.toolbar}>
         <Box display="flex" alignItems="center">
           <MenuIcon />
-          <img src="/youtube.png" alt="logo" className={classes.logo} />
+          <img
+            src={
+              settings.theme === THEMES.DARK
+                ? '/branco.png'
+                : '/new-youtube-logo.svg'
+            }
+            alt="logo"
+            className={classes.logo}
+          />
         </Box>
-        <Box>
-          <Paper component="form" className={classes.search}>
-            <InputBase
-              className={classes.input}
-              placeholder="Pesquisar"
-              inputProps={{ 'aria-label': 'search google maps' }}
-            />
-            <IconButton type="submit" aria-label="search">
-              <SearchIcon />
-            </IconButton>
-          </Paper>
-        </Box>
+        <Hidden mdDown>
+          <Box>
+            <Paper component="form" className={classes.search}>
+              <InputBase
+                className={classes.input}
+                placeholder="Pesquisar"
+                inputProps={{ 'aria-label': 'search google maps' }}
+              />
+              <IconButton type="submit" aria-label="search">
+                <SearchIcon />
+              </IconButton>
+            </Paper>
+          </Box>
+        </Hidden>
         <Box display="flex">
+          <IconButton className={classes.icons}>
+            {settings.theme === THEMES.DARK ? (
+              <Brightness7Icon
+                onClick={() => saveSettings({ theme: THEMES.LIGHT })}
+              />
+            ) : (
+              <Brightness4Icon
+                onClick={() => saveSettings({ theme: THEMES.DARK })}
+              />
+            )}
+          </IconButton>
           <IconButton className={classes.icons}>
             <VideoCall />
           </IconButton>
